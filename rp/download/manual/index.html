@@ -1,0 +1,553 @@
+
+
+<html><head>
+<title>Manual Download - Arcade RP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="Manual Download For Arcade Roleplay Mods/Texture">
+<meta name="keywords" content="arcaderp,roleplay,download">
+<meta name="author" content="TIGGER-X#9999">
+<meta property="og:site_name" content="ARCADE RP">
+<meta name="theme-color" content="#ff9d00">
+<link rel="icon" href="https://raw.githubusercontent.com/tigerr-X/arcadenetwork/3f31ee18d50590d26a67f30f3e229de80e99ed73/content/logo.svg">
+<script type="text/javascript">
+String.prototype.isBlank=function(){
+	return !this || /^\s*$/.test(this);
+}
+function parseLocationSearchToJSON(){
+	var r=[];
+	if(document.location.search.isBlank()) return r;
+	var parts=document.location.search.split("&");
+	if(parts[0].indexOf("?")==0) parts[0]=parts[0].substring(1);
+	for(var i=0;i<parts.length;i++){
+		var eq=parts[i].indexOf("=");
+		var p;
+		if(eq==-1) p=[parts[i]]; else p=[parts[i].substr(0,eq),parts[i].substr(eq+1,parts[i].length)];
+		r[p[0]]=p.length==1?null:p[1];
+	}
+	return r;
+}
+window.I=function(i){return document.getElementById(i);};
+//check browser and redirect to basic mode if incompatible
+function gotoBasic(){
+	if(window.localStorage){
+		if(localStorage.noSwitch)return;
+	}
+	document.location.href="basic.php"+(document.location.search.isBlank()?"":document.location.search);
+}
+if(!(window.XMLHttpRequest&&window.JSON&&window.localStorage&&!!window.HTMLCanvasElement&&document.createElement("div").style.animationName!==undefined&&document.createElement("div").style.flex!==undefined)){	//any browser with XHR, JSON, localStorage, Canvas, CSS Animation, Flex
+	gotoBasic();
+}
+
+//when going back/forward in history, do not store scroll position
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+function isMobile(){
+	return I("resp_test").offsetWidth>0;
+}
+function isDesktop(){
+	return I("resp_test").offsetWidth==0;
+}
+function isBasicMode(){
+	return false;
+}
+function showNav(){
+	I("nav").style.display='';
+}
+function hideNav(){
+	I("nav").style.display='none';
+}
+function showPage(){
+	I("fragment").style.display='';
+}
+function hidePage(){
+	I("fragment").style.display='none';
+}
+var inLightbox=true;
+var viewport = document.querySelector("meta[name=viewport]");
+function openLightbox(imgUrl){
+	try{viewport.setAttribute('content','width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=yes');}catch(e){}
+	I("lbimg").src=imgUrl;
+	I("lightbox").style.display='';
+	inLightbox=true;
+}
+function closeLightbox(){
+	try{viewport.setAttribute('content','width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no');}catch(e){}
+	I("lightbox").style.display='none';
+	I("lbimg").src="";
+	inLightbox=false;
+}
+function escapeCode(s){
+	return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br/>').replace(/\t/g,'&emsp;&emsp;').replace(/\s/g,'&nbsp;');
+}
+function loadText(target,url,onDone,noEscape){
+	var xhr=new XMLHttpRequest();
+	xhr.onreadystatechange=function(){
+		if(xhr.readyState==4&&xhr.status==200){
+			target.innerHTML=noEscape?xhr.responseText:escapeCode(xhr.responseText);
+			if(onDone)onDone();
+		}
+	}.bind(this);
+	xhr.open("GET",url,true);
+	xhr.send();
+}
+function highlight(target,lang,escape){
+	lang=lang.toLowerCase();
+	if(!I("hljs_load")){
+		var d=document.createElement("script");
+		d.id="hljs_load";
+		d.type="text/javascript";
+		d.src="HLJS/highlight.min.js";
+		I("fragment").appendChild(d);
+		d=document.createElement("link");
+		d.rel="stylesheet";
+		d.href="HLJS/ai.css";
+		I("fragment").appendChild(d);
+	}
+	target.className="code lang-"+lang;
+	if(escape) target.innerHTML=escapeCode(target.innerHTML);
+	var applyF=function(){hljs.configure({useBR: true});hljs.highlightBlock(target);}.bind(this);
+	var t=setInterval(function(){
+		if(hljs){
+			clearInterval(t);
+			if(hljs.listLanguages().indexOf(lang)!=-1){
+				applyF();
+			}else{
+				var xhr=new XMLHttpRequest();
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState==4&&xhr.status==200){
+						eval("window.newLang="+xhr.responseText);
+						hljs.registerLanguage(lang,window.newLang);
+						applyF();
+					}
+				}.bind(this);
+				xhr.open("GET","HLJS/langs/"+lang+".js",true);
+				xhr.send();
+			}
+		}
+	}.bind(this),100);
+}
+
+setInterval(function(){
+	var lb=I("lightbox"), img=I("lbimg");
+	if(lb!=null&&lb.style.display.isBlank()){
+		if(img.naturalWidth<=lb.clientWidth&&img.naturalHeight<=lb.clientHeight) img.className=""; else{
+			var ir=img.naturalWidth/img.naturalHeight, lr=lb.clientWidth/lb.clientHeight;
+			if(ir>=lr) img.className="fullWidth"; else img.className="fullHeight";
+		}
+	}
+},20);
+
+var flashing=false;
+function flash(color){
+	if(flashing) return; else flashing=true;
+	var f=document.createElement("div");
+	f.className="flashFx";
+	f.style.backgroundColor=color;
+	f.addEventListener('animationend',function(){
+		f.parentElement.removeChild(f);
+		flashing=false;
+	}.bind(this));
+	document.body.appendChild(f);
+}
+
+function showLoading(){
+	var c=document.createElement("div");
+	c.className="loading";
+	var stripe=document.createElement("div");
+	stripe.className="stripe";
+	var frag=I("fragment");
+	stripe.appendChild(c);
+	frag.innerHTML="";
+	frag.appendChild(stripe);
+}
+function showError(err){
+	window._err=err;
+	loadFragment('error.frag',false);
+}
+function createCommentsForm(id,container){
+			var f=document.createElement("form");
+		var e=document.createElement("input");
+		e.name="email";
+		e.type="text";
+		e.setAttribute("placeholder","Email (optional, private)");
+		f.appendChild(e);
+		var t=document.createElement("textarea");
+		t.name="text";
+		t.rows=4;
+		t.setAttribute("placeholder","Type a comment here...");
+		f.appendChild(t);
+		var b=document.createElement("input");
+		b.type="button";
+		b.value="Post";
+		f.appendChild(b);
+		container.appendChild(f);
+		var c=document.createElement("div");
+		c.className="commentsArea";
+		container.appendChild(c);
+		b.onclick=function(){sendComment(id,t,e,c);};
+		loadComments(id,c);
+		
+}
+function createShareLinks(url,container){
+	container.innerHTML="";
+	var eurl=encodeURIComponent(url);
+	var a=document.createElement("a");
+	a.className="share share_fb";
+	a.target="_blank";
+	a.href="https://www.facebook.com/sharer/sharer.php?u="+eurl;
+	container.appendChild(a);
+	a=document.createElement("a");
+	a.className="share share_tw";
+	a.target="_blank";
+	a.href="https://twitter.com/home?status="+eurl;
+	container.appendChild(a);
+	a=document.createElement("a");
+	a.className="share share_gplus";
+	a.target="_blank";
+	a.href="https://plus.google.com/share?url="+eurl;
+	container.appendChild(a);
+	a=document.createElement("input");
+	a.type="text";
+	a.className="share share_link";
+	a.value=url;
+	a.onclick=a.select;
+	container.appendChild(a);
+}
+function loadComments(id,container){
+	container.innerHTML="";
+			var d=document.createElement("d");
+		d.className="loading";
+		container.appendChild(d);
+		var xhr=new XMLHttpRequest();
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4){
+				if(xhr.status==200){
+					container.innerHTML="";
+					try{
+						if(parseInt(xhr.responseText)==1){container.innerHTML="Server error"; return;}
+					}catch(e){}
+					try{
+						var comments=JSON.parse(xhr.responseText);
+						for(var i=0;i<comments.length;i++){
+							var d=document.createElement("div");
+							d.className="comment";
+							d.innerHTML=comments[i];
+							container.appendChild(d);
+						}
+					}catch(e){
+						container.innerHTML="Couldn't load comments ("+e+")";
+					}
+				}
+			}
+		}
+		xhr.open("GET","getComments.php?id="+id+"&r="+Math.random(),true);
+		xhr.send();
+	}
+var sending=false;
+function sendComment(id,t,e,commentsArea){
+	if(t.value.isBlank()||sending){ return;}
+	sending=true;
+	var text=t.value;
+	var email=e.value;
+	var xhr=new XMLHttpRequest();
+	xhr.onreadystatechange=function(){
+		if(xhr.readyState==4){
+			sending=false;
+			if(xhr.status==200){
+				try{
+					if(parseInt(xhr.responseText)==1){return;}
+				}catch(e){alert("An error occurred, please try again"); return;}
+				t.value="";
+				loadComments(id,commentsArea);
+			}
+		}
+	}
+	var params="";
+	params+="id="+encodeURIComponent(id)+"&text="+encodeURIComponent(text)+"&email="+encodeURIComponent(email)+"&r="+Math.random();
+	xhr.open("POST","postComment.php",true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.setRequestHeader("Content-length", params.length);
+	xhr.setRequestHeader("Connection", "close");
+	xhr.send(params);
+}
+function parseLinks(){
+	var d=document.getElementsByTagName("ai_link");
+	while(d.length>0){
+		var n=document.createElement("a");
+		for(var j=0;j<d[0].attributes.length;j++){
+			try{n.setAttribute(d[0].attributes.item(j).nodeName,d[0].attributes.item(j).value);}catch(e){}
+		}
+		n.innerHTML=d[0].innerHTML;
+		if(n.hasAttribute("frag")){
+			n.onclick=function(e){e.preventDefault();loadFragment(this.getAttribute("frag"));}.bind(n);
+			n.href="/?p="+d[0].getAttribute("frag");
+		}else if(n.hasAttribute("ext")){
+			n.href=n.getAttribute("ext");
+			n.target="_blank";
+			n.removeAttribute("ext");
+		}
+		d[0].parentNode.replaceChild(n,d[0]);
+	}
+	
+}
+function fadeCurrentFrag(onDone){
+	var f=I("fragment");
+	f.id=""; f.className="oldFragment";
+	f.addEventListener('animationend',function(){
+		f.parentElement.removeChild(f);
+		var d=document.createElement("div");
+		d.id="fragment";
+		I("page").appendChild(d);
+		if(onDone)onDone();
+	}.bind(this));
+}
+function onFragUnload(){}
+var loading=false, currentFrag="";
+var loadLater=[];
+function loadFragment(url,pushState){
+	if(loading){
+		loadLater.push([url,pushState]);
+	}
+	loading=true;
+	flash("rgba(255,255,255,0.5)");
+	if(ai_background)ai_background.loadStart();
+	showNav();
+	showPage();
+	closeLightbox();
+	onFragUnload();
+	onFragUnload=function(){}
+	url=unescape(url);
+	if(typeof pushState == 'undefined') pushState=true;
+	try{if(pushState){currentFrag=url; window.history.pushState(url, document.title, '/?p='+url);}}catch(e){}
+	if(isDesktop()){
+		//prevent the page from scrolling up when a loading is triggered (because fragment is removed and page becomes 0px tall). Mobile mode uses a different layout so it's not necessary.
+		I("page").style.height=I("page").scrollHeight+"px"; 
+	}
+	fadeCurrentFrag(function(){
+		if(isDesktop()){
+			//now it can scroll up
+			I("page").style.height="";
+			window.scrollBy(0,-9999999);
+		}
+		showLoading();
+		var xhr=new XMLHttpRequest();
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4){
+				if(xhr.status==200){
+					fadeCurrentFrag(function(){
+						loading=false;
+						flash("rgba(255,255,255,0.5)");
+						if(ai_background)ai_background.loadDone();
+						var frag=I("fragment");
+						frag.innerHTML=xhr.responseText;
+						var footer=document.createElement("div");
+						footer.id="footer";
+						frag.appendChild(footer);
+						loadText(footer,"footer.php",function(){parseLinks()},true);
+						document.title="Federico Dossena";
+						var scripts=frag.getElementsByTagName("script");
+						for(var i=0;i<scripts.length;i++) eval(scripts[i].innerHTML);
+						parseLinks();
+						var xhr2=new XMLHttpRequest();
+						xhr2.onreadystatechange=function(){
+							if(xhr2.readyState==4){
+								if(xhr2.status==200){
+									var fragInfo=JSON.parse(xhr2.responseText);
+									if(!!fragInfo.title) document.title=fragInfo.title+" - Federico Dossena";
+									var aTitle=I("_articleTitle_");
+									if(aTitle)aTitle.id="article_title";
+									aTitle=I("article_title");
+									if(aTitle){aTitle.innerHTML=(!!fragInfo.title)?fragInfo.title:"";}
+								}
+							}
+						}
+						xhr2.open("POST","fetch_frag_info.php?p="+url);
+						xhr2.send("random="+Math.random());
+						var shareArea=I("_share_");
+						if(shareArea) createShareLinks(document.location.href,shareArea);
+						var oldC=I("_comments_");
+						if(oldC)oldC.id="article_comments";
+						var commentsArea=I("article_comments");
+						if(commentsArea) createCommentsForm(document.location.search.substring(3),commentsArea);
+						var latest=I("_latestPost_");
+						if(latest){
+							var xlp=new XMLHttpRequest();
+							xlp.onreadystatechange=function(){
+								if(xlp.readyState==4){
+									if(xlp.status==200){
+										latest.innerHTML=xlp.responseText;
+										parseLinks();
+									}
+								}
+							}
+							xlp.open("GET","articles.php?lastPost=true&random="+Math.random());
+							xlp.send();
+						}
+						var featured=I("_featuredPost_");
+						if(featured){
+							var xlp2=new XMLHttpRequest();
+							xlp2.onreadystatechange=function(){
+								if(xlp2.readyState==4){
+									if(xlp2.status==200){
+										featured.innerHTML=xlp2.responseText;
+										parseLinks();
+									}
+								}
+							}
+							xlp2.open("GET","articles.php?lastPost=featured&random="+Math.random());
+							xlp2.send();
+						}
+					});
+					
+				}else{loading=false; showError(xhr.status);}
+			}
+		}
+		xhr.open("POST",url.toLowerCase().substr(url.length-3)==".md"?("md.php?p="+url):url,true);
+		xhr.send("random="+Math.random());
+	});
+}
+setInterval(function(){
+	if(loading) return;
+	if(loadLater.length>0){
+		var data=loadLater.shift();
+		loadFragment(data[0],data[1]);
+	}
+},100);
+
+window.onpopstate = function(e){
+	if(inLightbox){closeLightbox(); window.history.pushState(currentFrag, document.title, '/?p='+currentFrag); return;}
+    if(e.state){ loadFragment(e.state,false);}
+};
+	
+function autoLoad(){
+	parseLinks();
+	closeLightbox();
+	try{
+		var req=parseLocationSearchToJSON();
+		if(typeof req["p"] === "undefined") throw("");
+		loadFragment(req["p"],true);
+	}catch(e){
+		loadFragment("home.frag",true);
+	}
+}
+
+function toggleNavExp(){
+	//in mobile view, toggles the menu
+	if(isMobile){
+		var nav=I("nav");
+		if(nav.className.isBlank()) nav.className='expanded'; else nav.className='';
+	}
+}
+
+setInterval(function(){
+	try{
+		var iframes=I("fragment").getElementsByTagName("iframe");
+		for(var i=0;i<iframes.length;i++){
+			var x=iframes[i];
+			x.style.height=x.contentDocument.getElementsByTagName("body")[0].clientHeight+"px";
+		}
+	}catch(e){}
+},50);
+
+setInterval(function(){
+	var articleEntries=document.getElementsByClassName("articleEntry");
+	for(var i=0;i<articleEntries.length;i++){
+		if(!articleEntries[i].lazyLoadDone&&isVisible(articleEntries[i])){
+			articleEntries[i].lazyLoadDone=true;
+			articleEntries[i].getElementsByClassName("background")[0].style.backgroundImage="url('"+articleEntries[i].getAttribute("lazyLoadBkUrl")+"')";
+		}
+	}
+},100);
+
+var ai_background;
+
+</script>
+<script src="https://fdossena.com/BACKGROUNDS/warpspeed.js?20161209" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="https://fdossena.com/main.css?20190711">
+<link rel="stylesheet" type="text/css" href=https://fdossena.com/print.css?20170306" media="print">
+<style type="text/css">
+.basic_only{
+	display:none;
+}
+</style>
+
+</head>
+<body onload="autoLoad()" cz-shortcut-listen="true">
+<div id="background">
+	<canvas id="bkFrame" width="1351" height="700"></canvas>
+	<script type="text/javascript">
+		ai_background=new WarpSpeed("bkFrame",{targetSpeed:0.8, speedAdjFactor:0.07, shape:"square", backgroundColor:"hsl(263,45%,8%)", speedWhileLoading:18});
+	</script>
+</div>
+
+<div id="page" class="">
+	<img id="campaign-icon" src="campaign-icon.png" style="display: none;">
+	<script type="text/javascript">
+		I("campaign-icon").style.display="none";
+	</script>
+	
+<div id="fragment" class=""><div>
+<link rel="stylesheet" type="text/css" href="https://fdossena.com/article.css">
+<link rel="stylesheet" type="text/css" href="https://fdossena.com/html5cool/buttons/buttons.css">
+<div class="basic_only">
+<div class="stripe">
+	<div class="content">
+		<h2>Old browser</h2>
+		<div class="section">
+
+		</div>
+	</div>
+</div>
+</div>
+<div class="basic_hide">
+
+
+		
+<div class="stripe">
+	<div class="content">
+		<center><h3>ARCADE RP MANUAL CLIENT - DOWNLOAD</h3><p>
+            <h6> 35 MB - ZIP FILE </h6> </center>
+        </center>
+		<div class="section" style="padding:4em 0; background-image:url('html5cool/buttons/orangeB.png'); background-size:cover; text-align:center">
+				<a href="https://bit.ly/cloudarcaderp_manual" class="button2">DOWNLOAD</a><p>
+                <center>Click <a href="https://www.arcade-network.tk/rp/status/">here</a> to check server status.</center>
+ 
+			</div><div class="section">
+			
+			
+			
+			
+			
+		</div>
+		
+</div></div>
+		
+
+		
+
+		
+
+		
+		
+
+		
+		
+
+
+
+		
+
+
+
+</div>
+</div><div id="footer" class=""><div class="content">
+	ARCADE ROLEPLAY - <a frag="privacy/index.frag" href="https://invite.gg/tiggerx">Our Discord Server</a>
+</div>
+</div><script id="hljs_load" type="text/javascript" src="https://fdossena.com/HLJS/highlight.min.js"></script><link rel="stylesheet" href="https://fdossena.com/HLJS/ai.css"></div></div>
+<div id="lightbox" onclick="closeLightbox()" style="display: none;">
+	<img id="lbimg" onclick="closeLightbox()" src="" class="">
+</div>
+<div id="resp_test">&nbsp;</div>
+          </div>        </div></body></html>
