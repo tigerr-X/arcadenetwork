@@ -1,0 +1,88 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="apple-touch-icon" type="image/png" href="https://static.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+<meta name="apple-mobile-web-app-title" content="CodePen">
+<link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+<link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111" />
+<title>CodePen - Realtime Youtube counter / barrel counter / flip counter / odometer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/odometer@0.4.8/themes/odometer-theme-default.css'>
+<style>
+@import url("https://fonts.googleapis.com/css?family=Lato");
+body {
+  background-image: url("https://images4.alphacoders.com/929/thumb-1920-929372.png");
+  color: white;
+  font-family: 'Lato', sans-serif;
+}
+
+.container {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.odometer {
+  font-size: calc(2rem + 5vw);
+}
+
+.title {
+  letter-spacing: 1.5px;
+  line-height: 1.25;
+}
+</style>
+<script>
+  window.console = window.console || function(t) {};
+</script>
+<script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+</head>
+<body translate="no">
+<div class="container">
+<div class="counter">
+<p>RARE .</p>
+<div class="odometer" class="odometer" id="odometer">0</div>
+<h3 class="title">Youtube Subscribers <br>#SUB_TO_RARE</h3>
+</div>
+</div>
+<script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-157cd5b220a5c80d4ff8e0e70ac069bffd87a61252088146915e8726e5d9f147.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/odometer@0.4.8/odometer.min.js'></script>
+<script id="rendered-js">
+const channelId = 'UCRbDf91-P6Hdy9aMAPmuO6Q',
+apiKey = 'AIzaSyB361OxFYjoOALzvY-IOVBPtpTsVKFEUz8', // use your own!
+api_response = `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${channelId}&key=${apiKey}`,
+
+container = document.querySelector(".container"),
+col = document.querySelector(".counter"),
+odometer = document.getElementById("odometer");
+
+let subCount = 0;
+
+const urls = [api_response];
+
+setInterval(() => {
+  requestCall(api_response);
+}, 2000);
+
+const requestCall = (apiCall) =>
+fetch(apiCall).
+then(blob => blob.json()).
+then(data => {
+  subCount = data.items[0].statistics.subscriberCount;
+  odometer.innerHTML = subCount;
+});
+//# sourceURL=pen.js
+    </script>
+</body>
+</html>
