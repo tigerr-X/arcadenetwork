@@ -21,7 +21,7 @@ new Vue({
           artist: "TIGGER-X",
           cover: "https://i1.sndcdn.com/artworks-000665435482-063pwi-t500x500.jpg",
           source: "https://cf-media.sndcdn.com/B1xLQaMDciLD.128.mp3?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiKjovL2NmLW1lZGlhLnNuZGNkbi5jb20vQjF4TFFhTURjaUxELjEyOC5tcDMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE1ODk0MjM5OTV9fX1dfQ__&Signature=S9V~pgk2QuHGhIZWLg7J6tjxP8AeBQSNJ4gu6Lq3~pzMuW7vCM0BNSj5lxgqm4gDDfpccqF4~TWyrW1cav6QVaTCy3ypyYzliwy8j5v-JjHWDhxfUSXb5~EXHqdT1deEOAzMUxYyu0GnGZKuAtzDLFmRvjcH5hXXTQMOXodxWQclrsxHJ9VUARqDPQDZP698UhbgFQQsKgF-jibqERD5ye8hex7LHr0VBw6kuwy~4cLa6xu5tm8iSBiuXrRZm3eYYiEFah1GHY2E0NdC~LL8uYIcxiz9EqeL2ECKxfdaU~RqH2Fzv48sHx4I6UgyFX4pzfqnHBL2hjoUuy4SApd5pA__&Key-Pair-Id=APKAI6TU7MMXM5DG6EPQ",
-          url: "https://www.youtube.com/watch?v=z3wAjJXbYzA",
+          url: "https://soundcloud.com/hokoma-60853221/000-beat-el-king/s-CPbot",
           favorited: false
         },
         {
@@ -30,7 +30,7 @@ new Vue({
           cover: "https://raw.githubusercontent.com/muhammederdem/mini-player/master/img/2.jpg",
           source: "https://raw.githubusercontent.com/muhammederdem/mini-player/master/mp3/2.mp3",
           url: "https://www.youtube.com/watch?v=Lin-a2lTelg",
-          favorited: true
+          favorited: false
         },
         {
           name: "Extreme Ways",
@@ -54,7 +54,7 @@ new Vue({
           cover: "https://raw.githubusercontent.com/muhammederdem/mini-player/master/img/5.jpg",
           source: "https://raw.githubusercontent.com/muhammederdem/mini-player/master/mp3/5.mp3",
           url: "https://www.youtube.com/watch?v=0WlpALnQdN8",
-          favorited: true
+          favorited: false
         },
         {
           name: "Genius ft. Sia, Diplo, Labrinth",
@@ -70,7 +70,7 @@ new Vue({
           cover: "https://raw.githubusercontent.com/muhammederdem/mini-player/master/img/7.jpg",
           source: "https://raw.githubusercontent.com/muhammederdem/mini-player/master/mp3/7.mp3",
           url: "https://www.youtube.com/watch?v=me6aoX0wCV8",
-          favorited: true
+          favorited: false
         },
         {
           name: "Overdose",
