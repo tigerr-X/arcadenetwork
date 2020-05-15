@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: arcade-network.tk
+Token: 7c92db1c4d8fb9623ec9d6855e6a109d85d0a5ccf99383afeaee899241fe1460
