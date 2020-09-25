@@ -20,7 +20,7 @@ new Vue({
           name: "000 BEAT",
           artist: "TIGGER-X",
           cover: "https://i1.sndcdn.com/artworks-000665435482-063pwi-t500x500.jpg",
-          source: "http://51.83.254.77/radio/8000/ifmlive",
+          source: "http://51.83.254.77/radio/8000/ifmlive.m3u",
           url: "https://soundcloud.com/hokoma-60853221/000-beat-el-king/s-CPbot",
           favorited: false
         },
