@@ -17,11 +17,11 @@ new Vue({
       isTimerPlaying: false,
       tracks: [
         {
-          name: "000 BEAT",
-          artist: "TIGGER-X",
-          cover: "https://i1.sndcdn.com/artworks-000665435482-063pwi-t500x500.jpg",
-          source: "http://51.83.254.77/radio/8000/ifmlive.m3u",
-          url: "https://soundcloud.com/hokoma-60853221/000-beat-el-king/s-CPbot",
+          name: "IsMAil Sayeb el KORSI",
+          artist: "Wh1tER0sE",
+          cover: "https://instagram.ftun6-1.fna.fbcdn.net/v/t51.2885-19/s150x150/123137970_4605656356172428_2556263799027663095_n.jpg?_nc_ht=instagram.ftun6-1.fna.fbcdn.net&_nc_ohc=XhJz3YQSeRcAX_T8vko&tp=1&oh=dad429c5a7ffed03649e77cd72c31aa3&oe=5FE2AFA6",
+          source: "https://raw.githubusercontent.com/tigerr-X/arcadenetwork/gh-pages/content/ismail-beat.mp3",
+          url: "https://instagram.com/usaym_bs",
           favorited: false
         },
         {
