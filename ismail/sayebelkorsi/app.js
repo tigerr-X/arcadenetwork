@@ -30,9 +30,9 @@ function createTrackItem(index,name,duration){
 
   var listAudio = [
     {
-      name:"YA IsMaiL SaYeB EL kORsi - By Wh1tER0sE",
+      name:"YA IsMaiL SaYeB EL kORsi",
       file:"https://raw.githubusercontent.com/tigerr-X/arcadenetwork/gh-pages/content/ismail-beat.mp3",
-      duration:"01:09"
+      duration:"01:08"
     }
   ]
 
